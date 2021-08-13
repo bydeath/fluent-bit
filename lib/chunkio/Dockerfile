@@ -7,4 +7,4 @@ WORKDIR cio
 COPY . .
 RUN cmake . && make
 
-CMD tools/cio -p "tests/data/1.5kb.txt" -v -e 400 -w 10000
+CMD tools/cio -p "tests/data/1.5kb.txt" -v -e 2000 -w 10000
