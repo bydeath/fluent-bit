@@ -1,0 +1,45 @@
+services:
+  fluent-bit:
+    image: fluent/fluent-bit:1.8.2-debug
+    volumes:
+      - data:/data
+      - .:/chunkio:ro
+    command: /fluent-bit/bin/fluent-bit -c /chunkio/fluent-bit.conf
+    ports:
+      - 2020:2020
+  perf-tool:
+    build:
+      context: .
+    volumes:
+      - data:/data
+      - storage:/storage:rw
+    depends_on:
+      - prometheus
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+      - 8081:8080
+    volumes:
+      - /:/rootfs:ro
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    depends_on:
+      - fluent-bit
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    command:
+      - --config.file=/app/config/prometheus.yml
+    volumes:
+      - ./:/app/config:ro
+      - ./data/prometheus/config:/etc/prometheus/
+      - ./data/prometheus/data:/prometheus
+    depends_on:
+      - cadvisor
+volumes:
+  data:
+  storage:

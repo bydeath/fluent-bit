@@ -76,7 +76,7 @@
     write (STDERR_FILENO, #X ")\n" , sizeof(#X ")\n")-1); \
     break;
 
-#define CIO_PERF_PATH      "/tmp/cio-perf/"
+#define CIO_PERF_PATH      "/data"
 
 #define ONESEC_IN_NSEC     1000000000
 
