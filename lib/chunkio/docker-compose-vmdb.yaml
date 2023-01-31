@@ -40,6 +40,15 @@ services:
         #       - ./data/prometheus/data:/prometheus
     depends_on:
       - cadvisor
+      - victoria-metrics
+  victoria-metrics:
+    image: victoriametrics/victoria-metrics
+    container_name: victoria-metrics
+    ports:
+      - 8428:8428
+    volumes:
+      - vmstorage:/victoria-metrics-data
 volumes:
   data:
   storage:
+  vmstorage:
